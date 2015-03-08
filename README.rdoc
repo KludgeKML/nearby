@@ -1,28 +1,27 @@
-== README
+== Nearby
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A RESTFUL API system for storying and querying a database of positional objects. Nearby is the front end, the work behind the scenes is done by an elasticsearch cluster to which Nearby forms the public interface.
 
-Things you may want to cover:
+== Resources
 
-* Ruby version
+= Items
 
-* System dependencies
+A nearby Item is composed of a UUID, a latitude and a longitude (that is to say, an identity and a location). Each object may have zero to many Tags.
 
-* Configuration
+= Tags
 
-* Database creation
+A nearby Tag is composed of two integers, a category and a value. Client-side libraries should be responsible for converting string categories and values into integer pairs suitable for storage. This ensures that the minimum possible information is transferred over the wire and stored in the Nearby database, keeping client application data anonymous. Tags can be used in the search to filter results.
 
-* Database initialization
+== RESTFUL interface
 
-* How to run the test suite
+POST /items                    (pass JSON with latitude/longitude)
+                               returns UUID
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+POST /items/:uuid/tags         (pass JSON with category/value)
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+GET /items?nearto=:place	   (place could be town, postcode, lat/long pair)
+							   returns array of items ranked b
+
+GET /items?nearto=:place&tags=:cat,:val,:cat,:val
+							   (same as above, but cat and val must match)
